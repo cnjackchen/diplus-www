@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+	<title>比亚迪视频</title>
+	<link rel="stylesheet" href="/includes/site.css"/>
+	<style>
+	body {
+		max-width: 1400px;
+		padding: 0 10px;
+	}
+    .sticky-head {
+        padding: 10px;
+		background-color: white;
+		position: sticky;
+		top: 0;
+		z-index: 9;
+    }
+	.m-button-bar {
+		text-align: center;
+		margin: 10px 0;
+	}
+	.container {
+		margin: 10px 0 80px 0;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 10px;
+		width: 100%;
+	}
+	.cover-container {
+      	border: 1px solid #ccc;
+	}
+	.cover {
+		cursor: pointer;
+		aspect-ratio: 1.33;
+		width: 100%;
+	}
+	.cover-info {
+		margin-top: -5px;
+		padding: 5px;
+		background-color: dodgerblue;
+		color: white;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+	}
+	</style>
+	<script src="/includes/vue/vue.global.js"></script>
+	<script src="/includes/datetime-picker/flatpickr.js"></script>
+    <script src="/includes/jsshare.js"></script>
+</head>
+
+<body>
+	<div id="app">
+		<h3 style="text-align: center">比亚迪视频</h3>
+
+		<div v-if="!data.isMobile" class="flex-space-between sticky-head">
+			<div>
+				<label>
+					<input type="radio" value="0" v-model="data.type"/>
+					熄火哨兵
+				</babel>
+				<label>
+					<input type="radio" value="1" v-model="data.type"/>
+					全景记录仪
+				</babel>
+			</div>
+			<div v-if="data.type == 0">
+				<label>
+					<input type="radio" value="0" v-model="data.aiType"/>
+					全部
+				</babel>
+				<label>
+					<input type="radio" value="1" v-model="data.aiType"/>
+					有人
+				</babel>
+				<label>
+					<input type="radio" value="2" v-model="data.aiType"/>
+					有车
+				</babel>
+			</div>
+			<div>
+				<span>日期：</span>
+				<input ref="dateRef" v-model="data.date" style="text-align:center" @change="dateChanged"/>
+			</div>
+		</div>
+		<template v-else>
+			<div class="m-button-bar">
+				<label>
+					<input type="radio" value="0" v-model="data.type"/>
+					熄火哨兵
+				</label>
+				<label>
+					<input type="radio" value="1" v-model="data.type"/>
+					全景记录仪
+				</label>
+			</div>
+			<div v-if="data.type == 0" class="m-button-bar">
+				<label>
+					<input type="radio" value="0" v-model="data.aiType"/>
+					全部
+				</babel>
+				<label>
+					<input type="radio" value="1" v-model="data.aiType"/>
+					有人
+				</babel>
+				<label>
+					<input type="radio" value="2" v-model="data.aiType"/>
+					有车
+				</babel>
+			</div>
+			<div class="sticky-head m-button-bar">
+				<span>日期：</span>
+				<input ref="dateRef" v-model="data.date" style="text-align:center" @change="dateChanged"/>
+			</div>
+		</template>
+
+		<div class="container">
+			<div v-for="(row, index) in filteredFileList" :key="index" class="cover-container">
+				<img
+					class="cover"
+					:src="!row.cover ? 'media/byd.jpg' : 'data:image/jpeg;base64,' + row.cover"
+					@click="playVideo(row.key, row.brightnessFactor ? row.brightnessFactor : 1)"
+				/>
+				<div class="cover-info">
+					<div>{{ new Date(row.startTime).Format("YYYY-MM-DD hh:mm") }}</div>
+					<div>{{ row.storage == 0 ? '内部存储' : row.storage == 1 ? 'SD卡' : 'USB' }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	const data = Vue.ref({
+		isMobile: window.innerWidth < 600 || window.innerWidth < window.innerHeight,
+		fileList: [],
+		date: getUrlParam(location.href, 'date') || (new Date()).Format('YYYY-MM-DD'),
+		type: getUrlParam(location.href, 'type') || 0, // 0 熄火哨兵视频, 1 全景记录仪视频
+		aiType: getUrlParam(location.href, 'aiType') || 0, // 0 全部, 1 人, 2 车
+		auth: getUrlParam(location.href, 'auth') || ''
+	});
+	const dateRef = Vue.ref();
+	const getVideoDates = async () => {
+		const params = {
+			startTime: 0,
+			endTime: 0,
+			type: data.value.type,
+			auth: data.value.auth
+		}
+		const queryString = new URLSearchParams(params).toString();
+		let url = `api/videoDirs?${queryString}`;
+		const response = await fetch(url);
+		if (!response.ok) {
+			console.log('获取视频目录失败! ', response.status);
+			return;
+		}
+		const res = await response.json();
+		if (!res) {
+			console.log('获取视频目录失败! ', res);
+			return;
+		}
+		const dates = res.map(dateStr => {
+			return dateStr.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+		});
+		dateRef.value.flatpickr({
+			dateFormat: 'Y-m-d',
+			disableMobile: true,
+			enable: dates,
+		});
+	}
+	getVideoDates();
+
+	const app = Vue.createApp({
+		setup() {
+			const filteredFileList = Vue.computed(() => {
+				let aiType = data.value.aiType;
+				if (data.value.type > 1 || aiType == 0 || data.value.fileList.length == 0) {
+					return data.value.fileList;
+				}
+				return data.value.fileList.filter((row) => {
+					let fileName = decodeURIComponent(atob(row.key));
+					const match = fileName.match(/\.(\d{1,2}|100)_(\d{1,2}|100)\.mp4$/i);
+					if (!match) return false;
+					if (aiType == 1 && match[1] > 0) return true;
+					if (aiType == 2 && match[2] > 0) return true;
+				});
+			});
+
+			let observer;
+			const initObserver = (fileList) => {
+				if (observer) {
+					observer.disconnect();
+				}
+				const imgContainers = document.querySelectorAll('.cover-container');
+				observer = new IntersectionObserver((entries) => {
+					entries.forEach(async (entry) => {
+						if (entry.isIntersecting) {
+							const imgContainer = entry.target;
+							const index = Array.from(imgContainers).indexOf(imgContainer);
+							const params = {
+								key: fileList[index].key,
+								type: data.value.type,
+								auth: data.value.auth
+							}
+							const queryString = new URLSearchParams(params).toString();
+							let url = `api/videoInfo?${queryString}`;
+							const response = await fetch(url);
+							if (!response.ok) {
+								console.log(`获取视频信息失败! status: ${response.status}`);
+								return;
+							}
+							try {
+								const res = await response.json();
+								fileList[index].cover = res.cover;
+							} catch (e) {
+								console.log('获取视频信息失败!', e);
+								return;
+							}
+							const img = imgContainer.querySelector('img');
+							if (!fileList[index].hasOwnProperty('brightnessFactor')) {
+								let brightness = await getImgBrightness(img);
+								fileList[index].brightnessFactor = getBrightnessFactor(brightness);
+							}
+							img.style.filter = `brightness(${fileList[index].brightnessFactor})`;
+							observer.unobserve(imgContainer); // 停止观察已加载的容器
+						}
+					});
+				}, {
+					rootMargin: '0px',
+					threshold: 0.1 // 进入可视区域 10% 时触发
+				});
+				imgContainers.forEach(container => {
+					observer.observe(container);
+				});
+			}
+
+			// 计算图片亮度矫正系数
+			const getBrightnessFactor = (brightness) => {
+				let brightnessFactor = 1;
+				if (brightness > 0 && brightness < 90) {
+					const targetBrightness = Math.min(brightness + 50, 90); // 亮度最多调到90
+					brightnessFactor = Math.round((1 + (targetBrightness - brightness) / brightness) * 100) / 100;
+				}
+				return brightnessFactor;
+			}
+			// 计算图片亮度
+			const getImgBrightness = async (img) => {
+				try {
+					await new Promise((resolve, reject) => {
+						img.onload = resolve;
+						img.onerror = reject;
+					});
+				} catch (err) {
+					console.error('getImgBrightness: 图片加载失败', err);
+					return 1;
+				}
+				const canvas = document.createElement('canvas');
+				const ctx = canvas.getContext('2d');
+				ctx.drawImage(img, 0, 0, img.width, img.height);
+				const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+				const data = imageData.data;
+				// 每个像素由 4 个连续的值表示：[R, G, B, A]，分别代表红色、绿色、蓝色和透明度
+				// pixInterv 必须是4的倍数
+				const pixInterv = Math.floor(data.length / 100 / 4) * 4; // 取100个像素的亮度值
+				let totalBrightness = 0;
+				let brightnessDataCnt = 0;
+				let avgBrightness = 0;
+				for (let i = 0; i < (data.length - 4); i += pixInterv) {
+					const r = data[i];
+					const g = data[i + 1];
+					const b = data[i + 2];
+					totalBrightness += 0.299 * r + 0.587 * g + 0.114 * b;
+					brightnessDataCnt += 1;
+				}
+				avgBrightness = Math.round(brightnessDataCnt > 0 ? totalBrightness / brightnessDataCnt : 0);
+				return avgBrightness;
+			}
+
+			const updateVideoList = async () => {
+				data.value.fileList = [];
+				const params = {
+					type: data.value.type,
+					dir: (new Date(data.value.date)).Format("YYYYMMDD"),
+					auth: data.value.auth
+				}
+				const queryString = new URLSearchParams(params).toString();
+				let url = `api/videoFiles?${queryString}`;
+				const response = await fetch(url);
+				if (!response.ok) {
+					console.log('获取监控视频失败! ', response.status);
+					return;
+				}
+				try {
+					const res = await response.json();
+					data.value.fileList = res;
+				} catch (e) {
+					console.log('获取监控视频失败! ', e);
+					return;
+				}
+				Vue.nextTick(() => {
+					initObserver(filteredFileList.value);
+				});
+			}
+			updateVideoList();
+
+			const dateChanged = (e) => {
+				data.value.date = e.target.value;
+				updateVideoList();
+			}
+			Vue.watch(() => data.value.type, async (val) => {
+				await getVideoDates();
+				updateVideoList();
+			});
+			Vue.watch(() => data.value.aiType, (val) => {
+				Vue.nextTick(() => {
+					initObserver(filteredFileList.value);
+				});
+			});
+			const playVideo = (key, brightnessFactor) => {
+				const url = `play_video.html?key=${key}&brightnessFactor=${brightnessFactor}&auth=${data.value.auth}`;
+				window.open(url, '_blank');
+			}
+			return {
+				data,
+				dateRef,
+				dateChanged,
+				playVideo,
+				filteredFileList
+			};
+		}
+	}).mount('#app');
+	</script>
+</body>
+</html>

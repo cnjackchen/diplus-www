@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+	<title>播放视频</title>
+	<link rel="stylesheet" href="/includes/site.css"/>
+	<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+    }
+    .video-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+    }
+	.video {
+        object-fit: contain;
+        height: 100%;
+	}
+    .video-mobile {
+        transform: rotate(90deg);
+        width: 100vh;
+        height: 100vw;
+        object-fit: contain;
+	}
+	</style>
+    <script src="/includes/jsshare.js"></script>
+</head>
+
+<body>
+    <div class="video-container">
+        <video controls autoplay muted>
+            <source src="" type="video/mp4">
+        </video>
+    </div>
+    
+    <script>
+    const key = getUrlParam(location.href, 'key');
+    const brightnessFactor = getUrlParam(location.href, 'brightnessFactor') || 1;
+    const auth = getUrlParam(location.href, 'auth');
+
+    const video = document.querySelector(".video-container video");
+    const videoSource = document.querySelector(".video-container source");
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    video.className = w > h ? 'video' : 'video-mobile';
+    video.style.filter = `brightness(${brightnessFactor})`;
+    videoSource.src = `api/videoStream?key=${key}&auth=${auth}`;
+    </script>
+</body>
+</html>
