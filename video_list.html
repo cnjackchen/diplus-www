@@ -47,7 +47,7 @@
 		align-items: center;
 	}
 	</style>
-	<script src="/includes/vue/vue.global.js"></script>
+	<script src="/includes/vue/vue.global.prod.js"></script>
 	<script src="/includes/datetime-picker/flatpickr.js"></script>
     <script src="/includes/jsshare.js"></script>
 </head>
@@ -58,28 +58,13 @@
 
 		<div v-if="!data.isMobile" class="flex-space-between sticky-head">
 			<div>
-				<label>
-					<input type="radio" value="0" v-model="data.type"/>
-					熄火哨兵
-				</babel>
-				<label>
-					<input type="radio" value="1" v-model="data.type"/>
-					全景记录仪
-				</babel>
+				<label><input type="radio" value="0" v-model="data.type"/>熄火哨兵</babel>
+				<label><input type="radio" value="1" v-model="data.type"/>全景记录仪</babel>
 			</div>
 			<div v-if="data.type == 0">
-				<label>
-					<input type="radio" value="0" v-model="data.aiType"/>
-					全部
-				</babel>
-				<label>
-					<input type="radio" value="1" v-model="data.aiType"/>
-					有人
-				</babel>
-				<label>
-					<input type="radio" value="2" v-model="data.aiType"/>
-					有车
-				</babel>
+				<label><input type="radio" value="0" v-model="data.aiType"/>全部</babel>
+				<label><input type="radio" value="1" v-model="data.aiType"/>有人</babel>
+				<label><input type="radio" value="2" v-model="data.aiType"/>有车</babel>
 			</div>
 			<div>
 				<span>日期：</span>
@@ -88,28 +73,13 @@
 		</div>
 		<template v-else>
 			<div class="m-button-bar">
-				<label>
-					<input type="radio" value="0" v-model="data.type"/>
-					熄火哨兵
-				</label>
-				<label>
-					<input type="radio" value="1" v-model="data.type"/>
-					全景记录仪
-				</label>
+				<label><input type="radio" value="0" v-model="data.type"/>熄火哨兵</label>
+				<label><input type="radio" value="1" v-model="data.type"/>全景记录仪</label>
 			</div>
 			<div v-if="data.type == 0" class="m-button-bar">
-				<label>
-					<input type="radio" value="0" v-model="data.aiType"/>
-					全部
-				</babel>
-				<label>
-					<input type="radio" value="1" v-model="data.aiType"/>
-					有人
-				</babel>
-				<label>
-					<input type="radio" value="2" v-model="data.aiType"/>
-					有车
-				</babel>
+				<label><input type="radio" value="0" v-model="data.aiType"/>全部</babel>
+				<label><input type="radio" value="1" v-model="data.aiType"/>有人</babel>
+				<label><input type="radio" value="2" v-model="data.aiType"/>有车</babel>
 			</div>
 			<div class="sticky-head m-button-bar">
 				<span>日期：</span>
