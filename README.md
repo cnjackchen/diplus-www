@@ -3,8 +3,14 @@
 代码适用于安装了迪加APP的比亚迪车机，通过浏览器查看迪加熄火哨兵和全景记录仪视频。
 
 ### 用法
-1. 下载压缩包：[https://github.com/cnjackchen/diplus-www/archive/refs/heads/main.zip](https://github.com/cnjackchen/diplus-www/archive/refs/heads/main.zip)，得到 `diplus-www-main.zip` 文件。
+1. 在车机安装Termux。
 
-2. 解压 `diplus-www-main.zip` 文件，将解压后的 `diplus-www-main` 文件夹中所有文件复制到比亚迪车机内部存储 `vandiplus/website` 目录下。
+2. 将以下命令复制到Termux中运行：
+```
+curl -sSL https://ghfast.top/https://raw.githubusercontent.com/cnjackchen/diplus-www/refs/heads/main/scripts/install.sh -o install.sh && bash install.sh https://ghfast.top
+```
+以上命令首先下载install.sh脚本到Termux，然后运行脚本完成安装。
+以上命令中 `https://ghfast.top` 是github加速地址，如果失效请自行寻找有效网址并替换命令中的地址。
 
-3. 同一个wifi下的手机、电脑通过 `http://车机ip:8988/video_list.html?auth=xxxx` 浏览车机上的迪加视频。其中xxxx是在迪加 测试设置-API验证凭据 中设置的密码。
+
+更多信息请查阅教程：[Termux扩展比亚迪车机功能](https://docs.qq.com/doc/DWHVwWE1RYVBES2Fz)
