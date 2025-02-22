@@ -1,16 +1,28 @@
 # diplus-www
 
-代码适用于安装了迪加APP的比亚迪车机，通过浏览器查看迪加熄火哨兵和全景记录仪视频。
+在比亚迪车机安装Termux扩展车机功能，实现远程查看和管理车机文件和视频。
+
+### 前提
+1. 比亚迪车机，已开ADB权限
+2. 部分功能依赖于比亚迪第三方视频监控APP-迪加
 
 ### 用法
-1. 在车机安装Termux。
+1. 在车机安装Termux，完成Termux基本设置。
 
 2. 将以下命令复制到Termux中运行：
 ```
 curl -sSL https://ghfast.top/https://raw.githubusercontent.com/cnjackchen/diplus-www/refs/heads/main/scripts/install.sh -o install.sh && bash install.sh https://ghfast.top
 ```
 以上命令首先下载install.sh脚本到Termux，然后运行脚本完成安装。
-以上命令中 `https://ghfast.top` 是github加速地址，如果失效请自行寻找有效网址并替换命令中的地址。
+命令中的 `https://ghfast.top` 是github加速地址，如果失效请自行寻找有效网址并替换命令中的地址。
 
 
 更多信息请查阅教程：[Termux扩展比亚迪车机功能](https://docs.qq.com/doc/DWHVwWE1RYVBES2Fz)
+
+
+### 相关资源和项目
+本系统集成了以下项目和资源，感谢相关作者的付出。
+- [lucky](https://github.com/gdy666/lucky): ipv6动态域名、自动SSL证书、FileBrowser文件浏览
+- [easytier](https://github.com/EasyTier/EasyTier): 通过虚拟组网连接车机
+- [frp](https://github.com/fatedier/frp): 通过反代远程连接车机
+- [樱花Frp](https://www.natfrp.com): 基于frp二次开发、提供免费公共服务器的反代方案
