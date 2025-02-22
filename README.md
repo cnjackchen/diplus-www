@@ -22,6 +22,7 @@ curl -sSL https://ghfast.top/https://raw.githubusercontent.com/cnjackchen/diplus
 
 ### 相关资源和项目
 本系统集成了以下项目和资源，感谢相关作者的付出。
+- [caddy](https://github.com/caddyserver/caddy): Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS
 - [lucky](https://github.com/gdy666/lucky): ipv6动态域名、自动SSL证书、FileBrowser文件浏览
 - [easytier](https://github.com/EasyTier/EasyTier): 通过虚拟组网连接车机
 - [frp](https://github.com/fatedier/frp): 通过反代远程连接车机
