@@ -16,8 +16,7 @@ echo -e "所有第三方APP的著作权归原作者所有，web程序由 @甲壳
 echo -e "声明："
 echo "因本人水平有限以及第三方APP的不可控因素，本人不保证软件不会产生不可预料的问题导致系统故障、数据丢失！如你选择继续则表明你知晓并同意本声明。"
 
-echo -e "\n即将下载 home.tar 扩展包并自动解压文件到 ~/ 目录，~/.bashrc 文件将会被覆盖，\c"
-echo "如你在此文件中添加过代码，请先备份此文件，然后重新运行安装命令。"
+echo -e "\n即将部署 home.tar 扩展包到 ~/ 目录，~/.bashrc 文件将会被覆盖，如你在此文件中添加过代码，请先备份此文件，然后重新运行安装命令。"
 
 read -p "是否继续？(y/n): " choice
 if [[ "$choice" != "y" && "$choice" != "Y" ]]; then
@@ -45,9 +44,21 @@ if [[ "$todownload" == "y" || "$todownload" == "Y" ]]; then
     curl -L $hometar_url -o $HOME/home.tar
     if [ ! -f "$HOME/home.tar" ]; then
         echo "下载 home.tar 扩展包失败！请检查网络后重试，或者查找有效的 github 加速网址作为参数加在命令行最后。"
-        exit
+        exit 1
     fi
 fi
 
-echo "home.tar 解包到 ~/ 位置 ..."
+echo -e "\nhome.tar 部署到 ~/ 位置 ..."
+tar -xf "$HOME/home.tar" -C /data/data/com.termux/files/
+if [ ! -f "$HOME/.bashrc" ] || [ ! -d "$HOME/start_sh" ]; then
+    echo "部署扩展包失败，退出。"
+    exit 1
+fi
 
+echo -e "\n扩展包部署完成，运行 ~/.bashrc 完成初始化 ..."
+bash "$HOME/.bashrc"
+
+echo -e "\n比亚迪车机Termux扩展包部署完成！"
+echo "请通过车机安装的浏览器 http://127.0.0.1:8018，或者连接同一wifi的手机/电脑浏览器 http://车机IP:8018 访问车机web服务。"
+echo "web服务用户名：admin，初始密码：123456"
+echo -e "\n祝您用车愉快！"
