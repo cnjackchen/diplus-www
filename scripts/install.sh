@@ -3,6 +3,9 @@
 # 传递过来的参数
 github_proxy=$1
 
+# 有些环境取不到 $HOME, 这里直接设置
+home="/data/data/com.termux/files/home"
+
 echo -e "\n欢迎使用比亚迪车机Termux扩展包安装脚本！\n\n"
 
 echo "本扩展包软件主要功能生效的前提包括："
@@ -25,15 +28,15 @@ if [[ "$choice" != "y" && "$choice" != "Y" ]]; then
 fi
 
 todownload="y"
-if [ -f "$HOME/home.tar" ]; then
+if [ -f "$home/home.tar" ]; then
     echo "" 
     read -p "车机 ~/ 目录中已存在 home.tar 扩展包，是否需要重新下载？(y/n): " todownload
 fi
 
 if [[ "$todownload" == "y" || "$todownload" == "Y" ]]; then
     echo "下载 home.tar 扩展包到 ~/ ..."
-    if [ -f "$HOME/home.tar" ]; then
-        rm "$HOME/home.tar"
+    if [ -f "$home/home.tar" ]; then
+        rm "$home/home.tar"
     fi
 
     # home.tar压缩包下载地址
@@ -41,32 +44,52 @@ if [[ "$todownload" == "y" || "$todownload" == "Y" ]]; then
     if [ -n "$github_proxy" ]; then
         hometar_url="$github_proxy/$hometar_url"
     fi
-    curl -L $hometar_url -o $HOME/home.tar
-    if [ ! -f "$HOME/home.tar" ]; then
+    curl -L $hometar_url -o $home/home.tar
+    if [ ! -f "$home/home.tar" ]; then
         echo "下载 home.tar 扩展包失败！请检查网络后重试，或者查找有效的 github 加速网址作为参数加在命令行最后。"
         exit 1
     fi
 fi
 
 # 是首次安装还是更新
-is_update="n"
-if [ -d "$HOME/db" ] && [ -f "$HOME/db/db.db" ]; then
-    is_update="y"
+first_run="y"
+if [ -d "$home/db" ] && [ -f "$home/db/db.db" ]; then
+    first_run="n"
 fi
 
-echo -e "\nhome.tar 部署到 $HOME ..."
-tar -xf "$HOME/home.tar" -C /data/data/com.termux/files/
-if [ ! -f "$HOME/.bashrc" ] || [ ! -d "$HOME/start_sh" ] || [ ! -d "$HOME/www" ]; then
+echo -e "\n将扩展包部署到 $home ..."
+if [ "$first_run" == "y" ]; then
+    tar -xf "$home/home.tar" -C /data/data/com.termux/files/
+else
+    # 非首次安装只解压程序不覆盖数据
+    tar -xf "$home/home.tar" -C /data/data/com.termux/files/ \
+        home/boot \
+        home/caddy/caddyfile \
+        home/easytier \
+        home/lucky/lucky \
+        home/php \
+        home/sakurafrp \
+        home/www \
+        home/.bashrc
+fi
+if [ ! -f "$home/.bashrc" ] || [ ! -d "$home/boot" ] || [ ! -d "$home/www" ]; then
     echo "部署扩展包失败，退出。"
     exit 1
 fi
 
+# 清除之前版本留下的无用文件
+if [ -d "$home/start_sh" ]; then
+    rm -r "$home/start_sh"
+fi
+
 echo -e "\n扩展包部署完成，运行 ~/.bashrc 完成初始化 ..."
-bash "$HOME/.bashrc"
+# 运行.bashrc，传递 install 参数避免运行时最小化Termux窗口
+bash "$home/.bashrc" install
+
 
 echo -e "\n比亚迪车机Termux扩展包部署完成！"
 echo "请通过车机安装的浏览器 http://127.0.0.1:8018, 或者同一wifi的手机/电脑浏览器 http://车机IP:8018 访问车机web服务。"
-if [ "$is_update" == "n" ]; then
+if [ "$first_run" == "y" ]; then
     echo "本系统web/ssh/Lucky/FileBrowser初始用户名: admin, 密码: 123456"
     echo "登录后请及时修改用户名/密码"
 fi
