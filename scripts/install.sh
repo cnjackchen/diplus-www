@@ -19,7 +19,7 @@ done
 
 
 # 是首次安装还是更新
-if [ -f "$home/db/db.db" ]; then
+if [ ! -f "$home/db/db.db" ]; then
     do="firstrun"
 fi
 
