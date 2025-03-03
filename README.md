@@ -11,10 +11,10 @@
 
 2. 将以下命令复制到Termux中运行：
 ```
-curl -sSL https://ghfast.top/https://raw.githubusercontent.com/cnjackchen/diplus-www/refs/heads/main/scripts/install.sh -o install.sh && bash install.sh https://ghfast.top
+curl -sSL https://gh-proxy.com/https://raw.githubusercontent.com/cnjackchen/diplus-www/refs/heads/main/scripts/install.sh -o install.sh && bash install.sh --github_proxy https://gh-proxy.com
 ```
 以上命令首先下载install.sh脚本到Termux，然后运行脚本完成安装。
-命令中的 `https://ghfast.top` 是github加速地址，如果失效请自行寻找有效网址并替换命令中的地址。
+命令中的 `https://gh-proxy.com` 是github加速地址，如果失效请自行寻找有效网址并替换命令中的地址。
 
 
 更多信息请查阅教程：[Termux扩展比亚迪车机功能](https://docs.qq.com/doc/DWHVwWE1RYVBES2Fz)
@@ -27,3 +27,13 @@ curl -sSL https://ghfast.top/https://raw.githubusercontent.com/cnjackchen/diplus
 - [easytier](https://github.com/EasyTier/EasyTier): 通过虚拟组网连接车机
 - [frp](https://github.com/fatedier/frp): 通过反代远程连接车机
 - [樱花Frp](https://www.natfrp.com): 基于frp二次开发、提供免费公共服务器的反代方案
+
+### 更新记录
+
+#### 2025.3.3 v1.1
+1. 修复原车记录仪视频封面错乱、无法播放的问题。
+2. 系统设置-通用中增加系统在线更新功能。
+3. 界面修改。
+
+#### v1.0
+第一个版本
