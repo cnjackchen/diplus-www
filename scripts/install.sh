@@ -104,6 +104,12 @@ if [ ! -f "$home/.bashrc" ]; then
 fi
 
 # 版本写入数据库
+if ! command -v sqlite3 > /dev/null; then
+    echo -e "\n安装 sqlite ..."
+    pkg install sqlite -y
+    sqlite3 -version
+fi
+echo "将系统版本号写入数据库 ..."
 sqlite3 "$home/db/db.db" "UPDATE settings SET data='$version' WHERE app='global' AND param='version'"
 
 echo -e "\n扩展包部署完成，运行 ~/.bashrc 完成初始化 ..."
@@ -120,7 +126,7 @@ if [ "$do" == "firstrun" ] || [ "$do" == "install" ]; then
     echo -e "\n比亚迪车机Termux扩展包部署完成！"
     echo "请通过车机安装的浏览器 http://127.0.0.1:8018, 或者同一wifi的手机/电脑浏览器 http://车机IP:8018 访问车机web服务。"
     if [ "$do" == "firstrun" ]; then
-        echo "本系统web/Lucky/FileBrowser初始用户名: admin, 密码: 123456"
+        echo "本系统 ssh 用户名: $(whoami), 密码: 123456, web/Lucky/FileBrowser用户名: admin, 密码: 123456。"
         echo "登录后请及时修改用户名/密码"
     fi
     echo -e "\n祝您用车愉快！"
