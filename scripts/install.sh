@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 当前版本
-version="1.1"
+version="1.2"
 home="/data/data/com.termux/files/home"
 
 # 传递过来的参数, 例:
@@ -88,7 +88,6 @@ else
         home/caddy/caddyfile \
         home/easytier \
         home/lucky/lucky \
-        home/lucky/filebrowser.db \
         home/php \
         home/sakurafrp \
         home/www \
