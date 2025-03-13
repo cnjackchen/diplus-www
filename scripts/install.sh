@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 当前版本
-version="1.3"
+version="1.4"
 home="/data/data/com.termux/files/home"
 
 # 传递过来的参数, 例:
@@ -72,7 +72,14 @@ if [ ! -f "$home/home.tar" ]; then
     exit 1
 fi
 
+if ! command -v sqlite3 > /dev/null; then
+    echo -e "\n安装 sqlite ..."
+    pkg install sqlite -y
+    sqlite3 -version
+fi
+
 echo -e "\n将扩展包部署到 $home ..."
+
 # 备份.bashrc
 if [ -f "$home/.bashrc" ]; then
     mv "$home/.bashrc" "$home/.bashrc.bak"
@@ -92,6 +99,13 @@ else
         home/sakurafrp \
         home/www \
         home/.bashrc
+
+    # 之前版本使用 diplusUserWechat 参数, 本版改到 msgTo
+    diplusUserWechat=$(sqlite3 "$home/db/db.db" "SELECT data FROM settings WHERE app = 'global' AND param = 'diplusUseWechat'")
+    msgToId=$(sqlite3 "$home/db/db.db" "SELECT id FROM settings WHERE app = 'global' AND param = 'msgTo'")
+    if [ "$diplusUserWechat" == "1" ] && [ -z "$msgToId" ]; then
+        sqlite3 "$home/db/db.db" "INSERT INTO settings (app, param, data) VALUES ('global', 'msgTo', 'wechat')"
+    fi
 fi
 
 if [ ! -f "$home/.bashrc" ]; then
@@ -102,12 +116,7 @@ if [ ! -f "$home/.bashrc" ]; then
     exit 1
 fi
 
-# 版本写入数据库
-if ! command -v sqlite3 > /dev/null; then
-    echo -e "\n安装 sqlite ..."
-    pkg install sqlite -y
-    sqlite3 -version
-fi
+# 版本号写入数据库
 echo "将系统版本号写入数据库 ..."
 sqlite3 "$home/db/db.db" "UPDATE settings SET data='$version' WHERE app='global' AND param='version'"
 
