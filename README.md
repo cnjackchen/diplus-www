@@ -30,6 +30,10 @@ curl -sSL https://ghfast.top/https://raw.githubusercontent.com/cnjackchen/diplus
 
 ### 更新记录
 
+### v1.4 2025.03.13
+1. easytier改为armv7版本(兼容老款车机)。
+2. 增加迪加报警信息推送到钉钉的功能, 支持推送视频封面(如需推送封面建议等待时间设为20秒以上)。
+
 ### v1.3 2025.03.08
 1. 修复初次安装初始密码无法登录的问题。
 2. 增加自定义系统首页图片和微信信息图片的功能。
