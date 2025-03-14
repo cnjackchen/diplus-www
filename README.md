@@ -16,6 +16,7 @@ curl -sSL https://ghfast.top/https://raw.githubusercontent.com/cnjackchen/diplus
 以上命令首先下载install.sh脚本到Termux，然后运行脚本完成安装。
 命令中的 `https://ghfast.top` 是github加速地址，如果失效请自行寻找有效网址并替换命令中的地址。
 
+3. 浏览器 http://车机IP:8018 进入系统界面。
 
 更多信息请查阅教程：[Termux扩展比亚迪车机功能](https://docs.qq.com/doc/DWHVwWE1RYVBES2Fz)
 
