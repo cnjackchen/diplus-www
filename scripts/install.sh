@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 当前版本
-version="1.5"
+version="2.0"
 home="/data/data/com.termux/files/home"
 
 # 传递过来的参数, 例:
@@ -99,13 +99,6 @@ else
         home/sakurafrp \
         home/www \
         home/.bashrc
-
-    # 之前版本使用 diplusUserWechat 参数, 本版改到 msgTo
-    diplusUserWechat=$(sqlite3 "$home/db/db.db" "SELECT data FROM settings WHERE app = 'global' AND param = 'diplusUseWechat'")
-    msgToId=$(sqlite3 "$home/db/db.db" "SELECT id FROM settings WHERE app = 'global' AND param = 'msgTo'")
-    if [ "$diplusUserWechat" == "1" ] && [ -z "$msgToId" ]; then
-        sqlite3 "$home/db/db.db" "INSERT INTO settings (app, param, data) VALUES ('global', 'msgTo', 'wechat')"
-    fi
 fi
 
 if [ ! -f "$home/.bashrc" ]; then
@@ -132,7 +125,7 @@ fi
 
 if [ "$do" == "firstrun" ] || [ "$do" == "install" ]; then
     echo -e "\n比亚迪车机Termux扩展包部署完成！"
-    echo "请通过车机安装的浏览器 http://127.0.0.1:8018, 或者同一wifi的手机/电脑浏览器 http://车机IP:8018 访问车机web服务。"
+    echo "请通过车机安装的浏览器 http://127.0.0.1:8018, 或者同一网络的手机/电脑浏览器 http://车机IP:8018 访问车机web服务。"
     if [ "$do" == "firstrun" ]; then
         echo "本系统 ssh 用户名: $(whoami), 密码: 123456, web/Lucky/FileBrowser用户名: admin, 密码: 123456。"
         echo "登录后请及时修改用户名/密码"
