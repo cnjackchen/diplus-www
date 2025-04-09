@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 当前版本
-version="2.3"
+version="2.4"
 home="/data/data/com.termux/files/home"
 
 # 传递过来的参数, 例:
@@ -89,7 +89,7 @@ if [ "$do" == "firstrun" ] || [ "$do" == "install" ]; then
     # 安装，解压所有文件
     tar -xf "$home/home.tar" -C /data/data/com.termux/files/
 else
-    # update, 解压部分文件
+    # update
     tar -xf "$home/home.tar" -C /data/data/com.termux/files/ \
         home/boot \
         home/caddy/caddyfile \
