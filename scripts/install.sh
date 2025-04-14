@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 当前版本
-version="2.4"
+version="2.5"
 home="/data/data/com.termux/files/home"
 
 # 传递过来的参数, 例:
