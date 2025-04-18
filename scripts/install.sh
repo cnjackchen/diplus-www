@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 当前版本
-version="2.5"
+version="2.6"
 home="/data/data/com.termux/files/home"
 
 # 传递过来的参数, 例:
@@ -95,6 +95,7 @@ else
         home/caddy/caddyfile \
         home/easytier \
         home/lucky/lucky \
+        home/lucky/lucky_cron.lkcf \
         home/php \
         home/sakurafrp \
         home/www \
