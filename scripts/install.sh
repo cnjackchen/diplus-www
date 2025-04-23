@@ -120,6 +120,7 @@ if [ "$do" == "firstrun" ] || [ "$do" == "install" ]; then
     # 运行.bashrc，传递 install 参数避免运行时最小化Termux窗口
     bash "$home/.bashrc" install
 else
+    pkill -f caddy
     bash "$home/.bashrc"
 fi
 
