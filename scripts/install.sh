@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 当前版本
-version="2.6"
+version="2.7"
 home="/data/data/com.termux/files/home"
 
 # 传递过来的参数, 例:
@@ -30,7 +30,7 @@ if [ "$do" == "firstrun" ] || [ "$do" == "install" ]; then
     echo "1. 车机打开ADB权限"
     echo "2. 部分功能依赖于比亚迪车机第三方监控软件迪加"
 
-    echo -e "\n本扩展包集成了lucky/easytier/frp等第三方APP，将会安装caddy/php等APP运行包内集成的web程序。\c"
+    echo -e "\n本扩展包集成了lucky/easytier/frp等第三方APP，将会安装nginx/php等APP运行包内集成的web程序。\c"
     echo -e "通过web页面管理部分第三方APP, 实现远程连接车机查看/管理文件和视频。\c"
     echo -e "所有第三方APP的著作权归原作者所有，web程序由 @甲壳虫 编写，项目托管在github平台(https://github.com/cnjackchen/diplus-www)。\n\n"
 
@@ -92,7 +92,7 @@ else
     # update
     tar -xf "$home/home.tar" -C /data/data/com.termux/files/ \
         home/boot \
-        home/caddy/caddyfile \
+        home/nginx \
         home/easytier \
         home/lucky/lucky \
         home/lucky/lucky_cron.lkcf \

@@ -27,13 +27,23 @@ curl -sSL https://ghfast.top/https://raw.githubusercontent.com/cnjackchen/diplus
 
 ### 相关资源和项目
 本系统集成了以下项目和资源，感谢相关作者的付出。
-- [caddy](https://github.com/caddyserver/caddy): Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS
+- [nginx](https://nginx.org): HTTP web server, reverse proxy, content cache, load balancer, TCP/UDP proxy server, and mail proxy server
 - [lucky](https://github.com/gdy666/lucky): ipv6动态域名、自动SSL证书、FileBrowser文件浏览
 - [easytier](https://github.com/EasyTier/EasyTier): 通过虚拟组网连接车机
 - [frp](https://github.com/fatedier/frp): 通过反代远程连接车机
 - [樱花Frp](https://www.natfrp.com): 基于frp二次开发、提供免费公共服务器的反代方案
 
 ### 更新记录
+
+### v2.7 2025.04.23
+1. 迪加哨兵报警推送至微信/钉钉的详情页面显示车辆位置，全屏播放哨兵视频页面在地图上显示车辆位置。
+2. 增加自动移动内部存储的迪加哨兵/记录仪视频到SD卡选项，开启后系统将在熄火几分钟后开始移动视频。
+3. 全屏播放视频时提前10秒预加载下一个视频，可选自动续播下一个视频。
+4. 全屏播放推送的迪加哨兵视频/记录视频、原车记录仪视频时，点击地图轨迹上的点时视频跳转到对应的时段。
+5. 增加视频列表页面是否显示缩略图选项，车机性能差或网速慢可尝试关闭缩略图。
+6. web服务器caddy改为更主流的nginx。
+7. 增加自动设置哨兵报警、行驶轨迹记录迪加自动化配置的选项。注意：如选择自动设置自动化，请删除原已设置的相关的自动化配置。
+8. 可选在首页显示暂停推送报警的快捷按钮。
 
 ### v2.6 2025.04.18
 1. 车况数据中增加可选的在首页图片四角显示胎压数据。
