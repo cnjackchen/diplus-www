@@ -17,6 +17,13 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+# home.tar压缩包下载地址
+if [ -n "$github_proxy" ]; then
+    hometar_url="$github_proxy/https://github.com/cnjackchen/diplus-www/raw/refs/heads/main/tars/home.tar"
+else
+    hometar_url="https://raw.gitcode.com/qq_43458985/diplus-www/raw/main/tars/home.tar"
+fi
+
 
 # 是首次安装还是更新
 if [ ! -f "$home/db/db.db" ]; then
@@ -31,11 +38,11 @@ if [ "$do" == "firstrun" ] || [ "$do" == "install" ]; then
     echo "2. 部分功能依赖于比亚迪车机第三方监控软件迪加"
 
     echo -e "\n本扩展包集成了lucky/easytier/frp等第三方APP，将会安装nginx/php等APP运行包内集成的web程序。\c"
-    echo -e "通过web页面管理部分第三方APP, 实现远程连接车机查看/管理文件和视频。\c"
-    echo -e "所有第三方APP的著作权归原作者所有，web程序由 @甲壳虫 编写，项目托管在github平台(https://github.com/cnjackchen/diplus-www)。\n\n"
+    echo -e "实现远程连接车机，通过web页面管理车机文件、视频，查看行驶数据，接收哨兵报警等。\c"
+    echo -e "所有第三方APP的著作权归原作者所有，web程序由 @甲壳虫 编写，项目托管在github/GitCode。\n\n"
 
     echo -e "声明："
-    echo "因本人水平有限以及第三方APP的不可控因素，本人不保证软件不会产生不可预料的问题导致系统故障、数据丢失！如你选择继续则表明你知晓并同意本声明。"
+    echo "因本人水平有限以及第三方APP的不可控因素，不保证软件不会产生不可预料的问题导致系统故障、数据丢失！如你选择继续则表明你知晓并同意本声明。"
 
     echo -e "\n即将部署 home.tar 扩展包到 ~/ 目录，~/.bashrc 文件将会备份为 ~/.bashrc.bak。"
 
@@ -56,19 +63,13 @@ if [ "$do" == "firstrun" ] || [ "$do" == "install" ]; then
         if [ -f "$home/home.tar" ]; then
             rm "$home/home.tar"
         fi
-
-        # home.tar压缩包下载地址
-        hometar_url="https://github.com/cnjackchen/diplus-www/raw/refs/heads/main/tars/home.tar"
-        if [ -n "$github_proxy" ]; then
-            hometar_url="$github_proxy/$hometar_url"
-        fi
         curl -L $hometar_url -o $home/home.tar
     fi
 fi
 
 
 if [ ! -f "$home/home.tar" ]; then
-    echo "下载 home.tar 扩展包失败！请检查网络后重试，或者查找有效的 github 加速网址替换命令行中的加速地址。"
+    echo "下载 home.tar 扩展包失败，请检查网络后重试。"
     exit 1
 fi
 
@@ -112,7 +113,7 @@ fi
 
 # 版本号写入数据库
 echo "将系统版本号写入数据库 ..."
-sqlite3 "$home/db/db.db" "UPDATE settings SET data='$version' WHERE app='global' AND param='version'"
+sqlite3 "$home/db/db.db" "UPDATE settings SET data='$version' WHERE app = 'global' AND param = 'version'"
 
 echo -e "\n扩展包部署完成，运行 ~/.bashrc 完成初始化 ..."
 
@@ -120,6 +121,7 @@ if [ "$do" == "firstrun" ] || [ "$do" == "install" ]; then
     # 运行.bashrc，传递 install 参数避免运行时最小化Termux窗口
     bash "$home/.bashrc" install
 else
+    # 之前使用caddy作为web服务，先退出caddy
     pkill -f caddy
     bash "$home/.bashrc"
 fi
