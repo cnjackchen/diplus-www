@@ -15,11 +15,11 @@
 
 2. 自动安装（推荐）：车机Termux中运行以下命令：
 ```
-curl -sSL https://raw.gitcode.com/qq_43458985/diplus-www/raw/main/scripts/install.sh -o install.sh && bash install.sh
+bash <(curl -sSL https://raw.gitcode.com/qq_43458985/diplus-www/raw/main/scripts/install.sh)
 ```
 或者运行以下短链接命令：
 ```
-curl -sSL http://lanye.pw/diplus -o install.sh && bash install.sh
+bash <(curl -sSL http://lanye.pw/diplus)
 ```
 3. 如果以上链接失效也可以手动安装：下载install.sh、home.tar到车机Termux，运行 bash install.sh。
 
