@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 当前版本
-version="2.7"
+version="2.8"
 home="/data/data/com.termux/files/home"
 
 # 传递过来的参数, 例:
@@ -121,8 +121,11 @@ if [ "$do" == "firstrun" ] || [ "$do" == "install" ]; then
     # 运行.bashrc，传递 install 参数避免运行时最小化Termux窗口
     bash "$home/.bashrc" install
 else
-    # 之前使用caddy作为web服务，先退出caddy
+    # 以下几行清理2.7.2之前版本的不再使用的服务和文件
     pkill -f caddy
+    rm -f "$home/boot/diplus_config_nohup.sh"
+    rm -f "$home/boot/move_files_to_sd_nohup.sh"
+
     bash "$home/.bashrc"
 fi
 
