@@ -13,15 +13,16 @@
 ### 用法
 1. 在车机安装Termux并完成基本设置。
 
-2. 自动安装（推荐）：车机Termux中运行以下命令：
+2. 自动安装（推荐）：
+车机Termux中运行以下命令：
 ```
-bash <(curl -sSL https://raw.gitcode.com/qq_43458985/diplus-www/raw/main/scripts/install.sh)
+bash <(curl -sSL https://gh-proxy.com/https://raw.githubusercontent.com/cnjackchen/diplus-www/refs/heads/main/scripts/install.sh)
 ```
 或者运行以下短链接命令：
 ```
-bash <(curl -sSL http://lanye.pw/diplus)
+bash <(curl -sSL https://s.qzz.io/diplus-www)
 ```
-3. 如果以上链接失效也可以手动安装：下载install.sh、home.tar到车机Termux，运行 bash install.sh。
+3. 如果以上链接失效也可以手动安装：下载 install.sh、home.tar 到车机 Termux，运行 bash install.sh。
 
 4. 浏览器 http://车机IP:8018 进入系统界面。
 
@@ -35,13 +36,13 @@ bash <(curl -sSL http://lanye.pw/diplus)
 - [easytier](https://github.com/EasyTier/EasyTier): 通过虚拟组网连接车机
 - [frp](https://github.com/fatedier/frp): 通过反代远程连接车机
 - [樱花Frp](https://www.natfrp.com): 基于frp二次开发、提供免费公共服务器的反代方案
+- [LibreSpeed](https://github.com/librespeed/speedtest): 开源、本地部署的测网速代码
 
 
 ### 最近更新
 
-### v2.8.1 2025.05.05
-1. 添加要显示或监听的车况数据参数时，可以从参数列表中选择，不需要手工输入。
-2. 车况数据中如选择监听并保存，自动创建相应的迪加自动化配置，被监听的参数发生变化时自动保存数据。
-3. 推送哨兵报警信息可自定义AI识别可信度、最小报警间隔、信息标题、内容等。
-4. 全屏播放迪加录屏时在地图上显示车辆位置。
-5. 添加多个easytier公共服务器可选，服务器列表中显示服务器所在省份。
+### v2.9 2026.10.06
+1. 修复 Termux 无法保活问题。 
+2. 系统设置中增加 LibreSpeed 测网速模块，用于测试手机/电脑和车机之间的传输速度。
+3. easytier 更新到 v2.6.4。
+4. 远程控车支持执行 adb shell 指令。

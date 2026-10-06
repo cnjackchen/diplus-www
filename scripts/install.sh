@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 当前版本
-version="2.8.1"
+version="2.9"
 home="/data/data/com.termux/files/home"
 
 # 传递过来的参数, 例:
@@ -17,12 +17,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# home.tar压缩包下载地址
-if [ -n "$github_proxy" ]; then
-    hometar_url="$github_proxy/https://github.com/cnjackchen/diplus-www/raw/refs/heads/main/tars/home.tar"
-else
-    hometar_url="https://raw.gitcode.com/qq_43458985/diplus-www/raw/main/tars/home.tar"
-fi
+# home.tar压缩包下载地址 (仅从 github 下载; 无 github_proxy 参数时使用默认加速 https://gh-proxy.com)
+github_proxy="${github_proxy:-https://gh-proxy.com}"
+hometar_url="$github_proxy/https://github.com/cnjackchen/diplus-www/raw/refs/heads/main/tars/home.tar"
 
 
 # 是首次安装还是更新
@@ -100,7 +97,9 @@ else
         home/php \
         home/sakurafrp \
         home/www \
-        home/.bashrc
+        home/.bashrc \
+        home/byd_watchdog.sh \
+        home/start_services.sh
 fi
 
 if [ ! -f "$home/.bashrc" ]; then
@@ -121,11 +120,6 @@ if [ "$do" == "firstrun" ] || [ "$do" == "install" ]; then
     # 运行.bashrc，传递 install 参数避免运行时最小化Termux窗口
     bash "$home/.bashrc" install
 else
-    # 以下几行清理2.7.2之前版本的不再使用的服务和文件
-    pkill -f caddy
-    rm -f "$home/boot/diplus_config_nohup.sh"
-    rm -f "$home/boot/move_files_to_sd_nohup.sh"
-
     bash "$home/.bashrc"
 fi
 
